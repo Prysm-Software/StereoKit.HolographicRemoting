@@ -22,13 +22,16 @@ namespace StereoKit.HolographicRemoting
 		REMOTING_SECURE_CONNECTION_SERVER_CALLBACKS_MSFT    = 1000065014,
 		EVENT_DATA_REMOTING_DATA_CHANNEL_CREATED_MSFT       = 1000065015,
 		EVENT_DATA_REMOTING_DATA_CHANNEL_OPENED_MSFT        = 1000065016,
-		EVENT_DATA_REMOTING_DATA_CHANNEL_DATA_RECEIVED_MSFT = 1000065017,
+		EVENT_DATA_REMOTING_DATA_CHANNEL_DATA_RECEIVED_MSFT	= 1000065017,
 		EVENT_DATA_REMOTING_DATA_CHANNEL_CLOSED_MSFT        = 1000065018,
 		REMOTING_DATA_CHANNEL_CREATE_INFO_MSFT              = 1000065019,
 		REMOTING_DATA_CHANNEL_STATE_MSFT                    = 1000065020,
 		REMOTING_DATA_CHANNEL_SEND_DATA_INFO_MSFT           = 1000065021,
 		EVENT_DATA_REMOTING_TIMESTAMP_CONVERSION_READY_MSFT = 1000065022,
 		REMOTING_AUDIO_OUTPUT_CAPTURE_SETTINGS_MSFT         = 1000065023,
+		REMOTING_FRAME_MIRROR_IMAGE_D3D11_MSFT              = 1000100000,
+		REMOTING_FRAME_MIRROR_IMAGE_D3D12_MSFT              = 1000100001,
+		REMOTING_FRAME_MIRROR_IMAGE_INFO_MSFT               = 1000100002,
 	}
 
 	enum XrResult : Int32
@@ -128,5 +131,27 @@ namespace StereoKit.HolographicRemoting
 		public XrStructureType                      type;
 		public IntPtr                               next;
 		public XrRemotingAudioOutputCaptureModeMSFT audioOutputCaptureMode;
+	}
+
+	/// <summary>
+	/// <see cref="image"/> points to a <seealso cref="XrRemotingFrameMirrorImageD3D11MSFT"/> or a D3D12MSFT
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	struct XrRemotingFrameMirrorImageInfoMSFT
+	{
+		public XrStructureType type;
+		public IntPtr          next;
+		public IntPtr          image;
+	}
+
+	/// <summary>
+	/// <see cref="texture"/> points to a ID3D11Texture2D
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
+	struct XrRemotingFrameMirrorImageD3D11MSFT
+	{
+		public XrStructureType type;
+		public IntPtr          next;
+		public IntPtr          texture;
 	}
 }
