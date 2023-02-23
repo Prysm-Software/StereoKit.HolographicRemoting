@@ -15,13 +15,13 @@ namespace StereoKit.HolographicRemoting
 		private bool   _sendAudio;
 		private int    _maxBitrate;
 		private bool   _wideAudioCapture;
-		private bool _frameMirroringEnabled = false;
+		private bool   _frameMirroringEnabled = false;
 
-        XrRemotingFrameMirrorImageInfoMSFT mirrorFrameInfo;
-        Tex texture;
+		XrRemotingFrameMirrorImageInfoMSFT mirrorFrameInfo;
+		Tex                                texture;
 
-        public  bool FrameMirroringEnabled { get => _frameMirroringEnabled; set => _frameMirroringEnabled = Backend.OpenXR.ExtEnabled(mirroringExtName) ? value : false ; }
-		public  bool Enabled { get; private set; }
+		public  bool FrameMirroringEnabled { get => _frameMirroringEnabled; set => _frameMirroringEnabled = Backend.OpenXR.ExtEnabled(mirroringExtName) ? value : false ; }
+		public  bool Enabled               { get; private set; }
 
 		public HolographicRemoting(string ipAddress, ushort port = 8265, bool sendAudio = true, int maxBitrateKbps = 20000, bool wideAudioCapture = true)
 		{
@@ -45,35 +45,35 @@ namespace StereoKit.HolographicRemoting
 		}
 
 		public bool Initialize()
-        {
-            texture = new Tex(TexType.Rendertarget, TexFormat.Rgba32);
-            texture.SetSize(1440, 936);
-            texture.AddZBuffer(TexFormat.Depth32);
+		{
+			texture = new Tex(TexType.Rendertarget, TexFormat.Rgba32);
+			texture.SetSize(1440, 936);
+			texture.AddZBuffer(TexFormat.Depth32);
 
-            IntPtr nativeTex = texture.GetNativeSurface();
+			IntPtr nativeTex = texture.GetNativeSurface();
 
-            XrRemotingFrameMirrorImageD3D11MSFT mirrorImgD3D11 = new XrRemotingFrameMirrorImageD3D11MSFT();
-            mirrorImgD3D11.type = XrStructureType.REMOTING_FRAME_MIRROR_IMAGE_D3D11_MSFT;
-            mirrorImgD3D11.texture = nativeTex;
+			XrRemotingFrameMirrorImageD3D11MSFT mirrorImgD3D11 = new XrRemotingFrameMirrorImageD3D11MSFT();
+			mirrorImgD3D11.type    = XrStructureType.REMOTING_FRAME_MIRROR_IMAGE_D3D11_MSFT;
+			mirrorImgD3D11.texture = nativeTex;
 
-            int size = Marshal.SizeOf(typeof(XrRemotingFrameMirrorImageD3D11MSFT));
-            IntPtr memory = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(mirrorImgD3D11, memory, false);
+			int size = Marshal.SizeOf(typeof(XrRemotingFrameMirrorImageD3D11MSFT));
+			IntPtr memory = Marshal.AllocHGlobal(size);
+			Marshal.StructureToPtr(mirrorImgD3D11, memory, false);
 
-            mirrorFrameInfo = new XrRemotingFrameMirrorImageInfoMSFT();
-            mirrorFrameInfo.type = XrStructureType.REMOTING_FRAME_MIRROR_IMAGE_INFO_MSFT;
-            mirrorFrameInfo.image = memory;
+			mirrorFrameInfo       = new XrRemotingFrameMirrorImageInfoMSFT();
+			mirrorFrameInfo.type  = XrStructureType.REMOTING_FRAME_MIRROR_IMAGE_INFO_MSFT;
+			mirrorFrameInfo.image = memory;
 
-            return Enabled;
-        }
-        public void Shutdown  () { }
+			return Enabled;
+		}
+		public void Shutdown  () { }
 		public void Step      () 
 		{
 			if (_frameMirroringEnabled)
 			{
 				Backend.OpenXR.AddEndFrameChain(mirrorFrameInfo);
-            }
-        }
+			}
+		}
 
 		void OnPreCreateSession()
 		{
